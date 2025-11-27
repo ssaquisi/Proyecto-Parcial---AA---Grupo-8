@@ -1,14 +1,14 @@
 
-# Pseudocódigo del algoritmo Codificar - Grupo #8
+# PseudocÃ³digo del algoritmo Codificar - Grupo #8
 
-FUNCIÓN Codificar(cadena):
+FUNCIÃ“N Codificar(cadena):
     F = EscanearPrimerasApariciones(cadena)
-    ConjuntoOriginales = { d | F[d] ? null }
-    unicos = dígitos en ConjuntoOriginales ordenados según F[d]
+    ConjuntoOriginales = { d | F[d] != null }
+    unicos = dÃ­gitos en ConjuntoOriginales ordenados segÃºn F[d]
     (HuffmanCodificar, HuffmanDecodificar) = ConstruirHuffman(unicos)
     salida = []
-    SustitutosUsados = conjunto vacío
-    MapSub = [null × 10]
+    SustitutosUsados = conjunto vacÃ­o
+    MapSub = [null Ã— 10]
     PARA pos DESDE 0 HASTA longitud(cadena)-1:
         d = entero(cadena[pos])
         SI F[d] == pos ENTONCES
@@ -23,5 +23,7 @@ FUNCIÓN Codificar(cadena):
             agregar codigo a salida
         FIN SI
     FIN PARA
-    RETORNAR (salida, F, MapSub, unicos)
-FIN FUNCIÓN
+    cadena_codificada = concatenar(salida)
+    RETORNAR (salida, cadena_codificada, F, MapSub, unicos)
+FIN FUNCIÃ“N
+
