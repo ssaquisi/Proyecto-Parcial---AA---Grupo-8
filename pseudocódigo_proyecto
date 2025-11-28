@@ -101,7 +101,7 @@ FIN FUNCIÓN
 
 ##Función de codificación sobre el registro
 
-FUNCIÓN CodificarRegistro(registro):
+FUNCIÓN Codificar(registro):
 
     SI registro.estado != "original" ENTONCES
         ERROR "El registro no está en estado 'original'."
@@ -159,7 +159,7 @@ FIN FUNCIÓN
 
 ##Función de decodificación del registro
 
-FUNCIÓN DecodificarRegistro(registro):
+FUNCIÓN DeCodificar(registro):
 
     SI registro.estado != "codificada" ENTONCES
         ERROR "El registro debe estar en estado 'codificada' para decodificar."
@@ -328,7 +328,7 @@ FUNCIÓN Menu():
                     imprimir "Debe cargar datos primero."
                 SINO
                     PARA cada registro en lista_registros:
-                        CodificarRegistro(registro)
+                        Codificar(registro)
                     FIN PARA
                     imprimir "Codificación completada."
 
@@ -338,7 +338,7 @@ FUNCIÓN Menu():
                 SINO
                     PARA cada registro en lista_registros:
                         SI registro.estado == "codificada" ENTONCES
-                            DecodificarRegistro(registro)
+                            DeCodificar(registro)
                         SINO
                             imprimir "El registro no está codificado: " + registro.cadena_original
                         FIN SI
