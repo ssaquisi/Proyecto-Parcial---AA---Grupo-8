@@ -1,0 +1,367 @@
+##Estructura de datos aumentada
+
+ESTRUCTURA RegistroCadena:
+    cadena_original       // string
+    cadena_codificada     // string
+    cadena_decodificada   // string (opcional)
+    
+    F                     // arreglo[10] con primeras apariciones
+    MapSub                // arreglo[10] con sustituciones
+    unicos                // lista ordenada
+    salida                // lista paso a paso de símbolos codificados
+
+    longitud              // entero
+    estado                // "original" | "codificada" | "decodificada"
+FIN ESTRUCTURA
+
+
+##Función para crear registro nuevo para una cadena
+
+FUNCIÓN CrearRegistroCadena(cadena):
+
+    registro = nuevo RegistroCadena
+
+    registro.cadena_original = cadena
+    registro.cadena_codificada = ""
+    registro.cadena_decodificada = ""
+
+    registro.F = [null × 10]
+    registro.MapSub = [null × 10]
+    registro.unicos = []
+    registro.salida = []
+
+    registro.longitud = longitud(cadena)
+    registro.estado = "original"
+
+    RETORNAR registro
+FIN FUNCIÓN
+
+
+##Función para actualizar estado del registro
+
+FUNCIÓN ActualizarEstado(registro, nuevo_estado):
+    registro.estado = nuevo_estado
+FIN FUNCIÓN
+
+
+
+##Función para detectar primeras apariciones
+
+FUNCIÓN EscanearPrimerasApariciones(cadena):
+    
+    F = arreglo de tamaño 10 inicializado en null
+
+    PARA pos DESDE 0 HASTA longitud(cadena)-1:
+        d = entero(cadena[pos])
+
+        SI F[d] == null ENTONCES
+            F[d] = pos
+        FIN SI
+    FIN PARA
+
+    RETORNAR F
+FIN FUNCIÓN
+
+
+
+##Función para buscar sustitutos
+
+FUNCIÓN BuscarSustituto(d, ConjuntoOriginales, SustitutosUsados, inicio):
+    
+    s = inicio mod 10
+
+    PARA i DESDE 0 HASTA 9:
+        SI s NO está en ConjuntoOriginales Y
+           s NO está en SustitutosUsados ENTONCES
+            RETORNAR s
+        FIN SI
+
+        s = (s + 1) mod 10
+    FIN PARA
+
+    ERROR "No existe un sustituto disponible."
+FIN FUNCIÓN
+
+
+
+##Construcción del Huffman
+
+FUNCIÓN ConstruirHuffman(unicos):
+    
+    DEFINIR FUNCION HuffmanCodificar(simbolo):
+        RETORNAR simbolo      
+
+    DEFINIR FUNCION HuffmanDecodificar(codigo):
+        RETORNAR codigo       
+
+    RETORNAR (HuffmanCodificar, HuffmanDecodificar)
+FIN FUNCIÓN
+
+
+
+##Función de codificación sobre el registro
+
+FUNCIÓN CodificarRegistro(registro):
+
+    SI registro.estado != "original" ENTONCES
+        ERROR "El registro no está en estado 'original'."
+    FIN SI
+
+    cadena = registro.cadena_original
+
+    F = EscanearPrimerasApariciones(cadena)
+    registro.F = F
+
+    ConjuntoOriginales = { d | F[d] != null }
+
+    unicos = dígitos en ConjuntoOriginales ordenados según F[d]
+    registro.unicos = unicos
+
+    (HuffmanCodificar, HuffmanDecodificar) = ConstruirHuffman(unicos)
+
+    salida = []
+    SustitutosUsados = conjunto vacío
+    MapSub = [null × 10]
+
+    PARA pos DESDE 0 HASTA longitud(cadena)-1:
+
+        d = entero(cadena[pos])
+
+        SI F[d] == pos ENTONCES
+            codigo = HuffmanCodificar(d)
+            agregar codigo a salida
+
+        SINO
+            inicio = (d + 1) mod 10
+            s = BuscarSustituto(d, ConjuntoOriginales, SustitutosUsados, inicio)
+
+            MapSub[s] = d
+            agregar s a SustitutosUsados
+
+            codigo = HuffmanCodificar(s)
+            agregar codigo a salida
+        FIN SI
+    
+    FIN PARA
+
+    registro.salida = salida
+    registro.MapSub = MapSub
+
+    cadena_codificada = concatenar(salida)
+    registro.cadena_codificada = cadena_codificada
+
+    ActualizarEstado(registro, "codificada")
+
+    RETORNAR registro
+FIN FUNCIÓN
+
+
+
+##Función de decodificación del registro
+
+FUNCIÓN DecodificarRegistro(registro):
+
+    SI registro.estado != "codificada" ENTONCES
+        ERROR "El registro debe estar en estado 'codificada' para decodificar."
+    FIN SI
+
+    salida_codificada = registro.cadena_codificada
+    F = registro.F
+    MapSub = registro.MapSub
+    unicos = registro.unicos
+
+    (HuffmanCodificar, HuffmanDecodificar) = ConstruirHuffman(unicos)
+
+    n = longitud(salida_codificada)
+    salida = arreglo de tamaño n
+
+    PARA pos DESDE 0 HASTA n-1:
+
+        simbolo = HuffmanDecodificar(salida_codificada[pos])
+
+        SI F[simbolo] == pos ENTONCES
+            salida[pos] = simbolo
+
+        SINO SI MapSub[simbolo] ? null ENTONCES
+            salida[pos] = MapSub[simbolo]
+
+        SINO
+            ERROR "Simbolo inválido durante la decodificación."
+        FIN SI
+
+    FIN PARA
+
+    registro.cadena_decodificada = concatenar(salida)
+
+    ActualizarEstado(registro, "decodificada")
+
+    RETORNAR registro
+FIN FUNCIÓN
+
+
+
+##Función de carga y lectura de archivo
+FUNCIÓN LeerCadenasDesdeArchivo(ruta_archivo):
+
+    SI archivo_no_existe(ruta_archivo) ENTONCES
+        ERROR "El archivo no existe."
+    FIN SI
+
+    abrir archivo ruta_archivo en modo lectura
+
+    lista = lista vacía
+
+    PARA cada linea en archivo:
+        cadena = limpiar(linea)        // quitar espacios, saltos de línea
+        SI cadena no es vacía ENTONCES
+            agregar cadena a lista
+        FIN SI
+    FIN PARA
+
+    cerrar archivo
+
+    RETORNAR lista
+FIN FUNCIÓN
+
+
+
+##Función para guardar resultados en un archivo
+
+FUNCIÓN GuardarResultadosEnArchivo(ruta_salida, lista_registros):
+
+    abrir archivo ruta_salida en modo escritura
+
+    PARA cada registro en lista_registros:
+
+        escribir "Cadena original: " + registro.cadena_original
+        escribir "Cadena codificada: " + registro.cadena_codificada
+        escribir "Cadena decodificada: " + registro.cadena_decodificada
+
+        escribir "F: " + convertir_a_texto(registro.F)
+        escribir "MapSub: " + convertir_a_texto(registro.MapSub)
+        escribir "Unicos: " + convertir_a_texto(registro.unicos)
+        escribir "Salida paso a paso: " + convertir_a_texto(registro.salida)
+
+        escribir "Estado final: " + registro.estado
+        escribir "------------------------------------------"
+
+    FIN PARA
+
+    cerrar archivo
+FIN FUNCIÓN
+
+
+
+
+##Función para cargar datos desde archivo o consola
+
+FUNCIÓN CargarDatos():
+
+    imprimir "¿Desea cargar desde archivo (A) o por consola (C)?"
+    opcion = leer()
+
+    lista_cadenas = lista vacía
+
+    SI opcion == "A" ENTONCES
+        imprimir "Ingrese ruta del archivo:"
+        ruta = leer()
+        lista_cadenas = LeerCadenasDesdeArchivo(ruta)
+
+    SINO SI opcion == "C" ENTONCES
+        imprimir "¿Cuántas cadenas desea ingresar? (máx. 10)"
+        n = leer_entero()
+
+        SI n > 10 ENTONCES
+            ERROR "Máximo 10 cadenas permitidas."
+        FIN SI
+
+        repetir n veces:
+            imprimir "Ingrese cadena numérica:"
+            cadena = leer()
+            agregar cadena a lista_cadenas
+        FIN REPETIR
+
+    SINO
+        ERROR "Opción inválida."
+    FIN SI
+
+    // Convertir cadenas a registros
+    lista_registros = lista vacía
+    PARA cada cadena en lista_cadenas:
+        reg = CrearRegistroCadena(cadena)
+        agregar reg a lista_registros
+    FIN PARA
+
+    RETORNAR lista_registros
+FIN FUNCIÓN
+
+
+##Menú del programa
+
+FUNCIÓN Menu():
+
+    lista_registros = null
+    salir = FALSO
+
+    MIENTRAS salir == FALSO:
+
+        imprimir "============================================"
+        imprimir "                MENÚ PRINCIPAL"
+        imprimir "============================================"
+        imprimir "1. Cargar datos"
+        imprimir "2. Codificar"
+        imprimir "3. Decodificar"
+        imprimir "4. Guardar resultados en archivo"
+        imprimir "5. Salir"
+        imprimir "============================================"
+        imprimir "Seleccione una opción:"
+        opcion = leer()
+
+        SEGÚN opcion:
+
+            CASO "1":
+                lista_registros = CargarDatos()
+                imprimir "Datos cargados correctamente."
+
+            CASO "2":
+                SI lista_registros == null ENTONCES
+                    imprimir "Debe cargar datos primero."
+                SINO
+                    PARA cada registro en lista_registros:
+                        CodificarRegistro(registro)
+                    FIN PARA
+                    imprimir "Codificación completada."
+
+            CASO "3":
+                SI lista_registros == null ENTONCES
+                    imprimir "Debe cargar datos primero."
+                SINO
+                    PARA cada registro en lista_registros:
+                        SI registro.estado == "codificada" ENTONCES
+                            DecodificarRegistro(registro)
+                        SINO
+                            imprimir "El registro no está codificado: " + registro.cadena_original
+                        FIN SI
+                    FIN PARA
+                    imprimir "Decodificación completada."
+
+            CASO "4":
+                SI lista_registros == null ENTONCES
+                    imprimir "No hay datos para guardar."
+                SINO
+                    imprimir "Ingrese ruta del archivo de salida:"
+                    ruta = leer()
+                    GuardarResultadosEnArchivo(ruta, lista_registros)
+                    imprimir "Resultados guardados correctamente."
+                FIN SI
+
+            CASO "5":
+                salir = VERDADERO
+
+            OTRO:
+                imprimir "Opción inválida. Intente nuevamente."
+        FIN SEGÚN
+
+    FIN MIENTRAS
+
+FIN FUNCIÓN
