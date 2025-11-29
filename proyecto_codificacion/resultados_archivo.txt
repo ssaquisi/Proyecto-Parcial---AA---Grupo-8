@@ -1,0 +1,54 @@
+Cadena original: 201607899
+Cadena codificada: 201637894
+Cadena decodificada: 201607899
+F: [1, 2, 0, None, None, None, 3, 5, 6, 7]
+MapSub: [None, None, None, 0, 9, None, None, None, None, None]
+Unicos: [2, 0, 1, 6, 7, 8, 9]
+Salida paso a paso: ['2', '0', '1', '6', '3', '7', '8', '9', '4']
+Estado final: decodificada
+------------------------------------------
+Cadena original: 202401182
+Cadena codificada: 203451687
+Cadena decodificada: 202401182
+F: [1, 5, 0, None, 3, None, None, None, 7, None]
+MapSub: [None, None, None, 2, None, 0, 1, 2, None, None]
+Unicos: [2, 0, 4, 1, 8]
+Salida paso a paso: ['2', '0', '3', '4', '5', '1', '6', '8', '7']
+Estado final: decodificada
+------------------------------------------
+Cadena original: 0978654628
+Cadena codificada: 0978654123
+Cadena decodificada: 0978654628
+F: [0, None, 8, None, 6, 5, 4, 2, 3, 1]
+MapSub: [None, 6, None, 8, None, None, None, None, None, None]
+Unicos: [0, 9, 7, 8, 6, 5, 4, 2]
+Salida paso a paso: ['0', '9', '7', '8', '6', '5', '4', '1', '2', '3']
+Estado final: decodificada
+------------------------------------------
+Cadena original: 201607899
+Cadena codificada: 201637894
+Cadena decodificada: 201607899
+F: [1, 2, 0, None, None, None, 3, 5, 6, 7]
+MapSub: [None, None, None, 0, 9, None, None, None, None, None]
+Unicos: [2, 0, 1, 6, 7, 8, 9]
+Salida paso a paso: ['2', '0', '1', '6', '3', '7', '8', '9', '4']
+Estado final: decodificada
+------------------------------------------
+Cadena original: 202401182
+Cadena codificada: 203451687
+Cadena decodificada: 202401182
+F: [1, 5, 0, None, 3, None, None, None, 7, None]
+MapSub: [None, None, None, 2, None, 0, 1, 2, None, None]
+Unicos: [2, 0, 4, 1, 8]
+Salida paso a paso: ['2', '0', '3', '4', '5', '1', '6', '8', '7']
+Estado final: decodificada
+------------------------------------------
+Cadena original: 0978654628
+Cadena codificada: 0978654123
+Cadena decodificada: 0978654628
+F: [0, None, 8, None, 6, 5, 4, 2, 3, 1]
+MapSub: [None, 6, None, 8, None, None, None, None, None, None]
+Unicos: [0, 9, 7, 8, 6, 5, 4, 2]
+Salida paso a paso: ['0', '9', '7', '8', '6', '5', '4', '1', '2', '3']
+Estado final: decodificada
+------------------------------------------

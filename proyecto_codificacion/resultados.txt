@@ -1,0 +1,27 @@
+Cadena original: 202201679
+Cadena codificada: 203451679
+Cadena decodificada: 202201679
+F: [1, 5, 0, None, None, None, 6, 7, None, 8]
+MapSub: [None, None, None, 2, 2, 0, None, None, None, None]
+Unicos: [2, 0, 1, 6, 7, 9]
+Salida paso a paso: ['2', '0', '3', '4', '5', '1', '6', '7', '9']
+Estado final: decodificada
+------------------------------------------
+Cadena original: 202201578
+Cadena codificada: 203461578
+Cadena decodificada: 202201578
+F: [1, 5, 0, None, None, 6, None, 7, 8, None]
+MapSub: [None, None, None, 2, 2, None, 0, None, None, None]
+Unicos: [2, 0, 1, 5, 7, 8]
+Salida paso a paso: ['2', '0', '3', '4', '6', '1', '5', '7', '8']
+Estado final: decodificada
+------------------------------------------
+Cadena original: 202201679
+Cadena codificada: 203451679
+Cadena decodificada: 202201679
+F: [1, 5, 0, None, None, None, 6, 7, None, 8]
+MapSub: [None, None, None, 2, 2, 0, None, None, None, None]
+Unicos: [2, 0, 1, 6, 7, 9]
+Salida paso a paso: ['2', '0', '3', '4', '5', '1', '6', '7', '9']
+Estado final: decodificada
+------------------------------------------
